@@ -103,10 +103,10 @@ namespace MVC.ServiceReference1 {
         System.Threading.Tasks.Task<string> PostCategoryAsync(ApplicationService.DTOs.CategoryDTO categoryDTO);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/PutCategory", ReplyAction="http://tempuri.org/IService1/PutCategoryResponse")]
-        string PutCategory(ApplicationService.DTOs.CategoryDTO categoryDTO);
+        string PutCategory(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/PutCategory", ReplyAction="http://tempuri.org/IService1/PutCategoryResponse")]
-        System.Threading.Tasks.Task<string> PutCategoryAsync(ApplicationService.DTOs.CategoryDTO categoryDTO);
+        System.Threading.Tasks.Task<string> PutCategoryAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetCategoryById", ReplyAction="http://tempuri.org/IService1/GetCategoryByIdResponse")]
         ApplicationService.DTOs.CategoryDTO GetCategoryById(int id);
@@ -133,10 +133,10 @@ namespace MVC.ServiceReference1 {
         System.Threading.Tasks.Task<string> PostGameAsync(ApplicationService.DTOs.GameDTO gameDTO);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/PutGame", ReplyAction="http://tempuri.org/IService1/PutGameResponse")]
-        string PutGame(ApplicationService.DTOs.GameDTO gameDTO);
+        string PutGame(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/PutGame", ReplyAction="http://tempuri.org/IService1/PutGameResponse")]
-        System.Threading.Tasks.Task<string> PutGameAsync(ApplicationService.DTOs.GameDTO gameDTO);
+        System.Threading.Tasks.Task<string> PutGameAsync(int id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetGameById", ReplyAction="http://tempuri.org/IService1/GetGameByIdResponse")]
         ApplicationService.DTOs.GameDTO GetGameById(int id);
@@ -210,12 +210,12 @@ namespace MVC.ServiceReference1 {
             return base.Channel.PostCategoryAsync(categoryDTO);
         }
         
-        public string PutCategory(ApplicationService.DTOs.CategoryDTO categoryDTO) {
-            return base.Channel.PutCategory(categoryDTO);
+        public string PutCategory(int id) {
+            return base.Channel.PutCategory(id);
         }
         
-        public System.Threading.Tasks.Task<string> PutCategoryAsync(ApplicationService.DTOs.CategoryDTO categoryDTO) {
-            return base.Channel.PutCategoryAsync(categoryDTO);
+        public System.Threading.Tasks.Task<string> PutCategoryAsync(int id) {
+            return base.Channel.PutCategoryAsync(id);
         }
         
         public ApplicationService.DTOs.CategoryDTO GetCategoryById(int id) {
@@ -250,12 +250,12 @@ namespace MVC.ServiceReference1 {
             return base.Channel.PostGameAsync(gameDTO);
         }
         
-        public string PutGame(ApplicationService.DTOs.GameDTO gameDTO) {
-            return base.Channel.PutGame(gameDTO);
+        public string PutGame(int id) {
+            return base.Channel.PutGame(id);
         }
         
-        public System.Threading.Tasks.Task<string> PutGameAsync(ApplicationService.DTOs.GameDTO gameDTO) {
-            return base.Channel.PutGameAsync(gameDTO);
+        public System.Threading.Tasks.Task<string> PutGameAsync(int id) {
+            return base.Channel.PutGameAsync(id);
         }
         
         public ApplicationService.DTOs.GameDTO GetGameById(int id) {

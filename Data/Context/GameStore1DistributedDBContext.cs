@@ -12,5 +12,6 @@ namespace Data.Context
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

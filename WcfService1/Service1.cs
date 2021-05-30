@@ -54,9 +54,16 @@ namespace WcfService1
             return categoryService.GetById(id);
         }
 
-        public string PutCategory(CategoryDTO categoryDto)
+        public string PutCategory(int id)
         {
-            throw new NotImplementedException();
+            if (!categoryService.Edit(id))
+            {
+                return "Is not saved";
+            }
+            else
+            {
+                return "Saved";
+            }
         }
 
         public string PostCategory(CategoryDTO categoryDto)
@@ -92,7 +99,7 @@ namespace WcfService1
             }
         }
 
-        public string PutGame(GameDTO gameDTO)
+        public string PutGame(int id)
         {
             throw new NotImplementedException();
         }

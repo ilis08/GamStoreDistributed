@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MVC.Models;
+using MVC.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +10,18 @@ namespace MVC.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public int pageSize = 4;
+
+        public ActionResult Index(int page = 1)
         {
-            return View();
+            using (ServiceReference1.Service1Client client = new ServiceReference1.Service1Client)
+            {
+                GamesListViewModel model = new GamesListViewModel
+                {
+                    Games = client.Games
+            }
+            }
+            
         }
 
         public ActionResult About()

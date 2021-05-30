@@ -44,12 +44,18 @@ namespace ApplicationService.Implementations
             return categoryDTO;
         }
 
-        public bool Edit(int? id )
+        public bool Edit(int? id)
         {
-            Category category = ctx.Categories.Find(id);
-            ctx.Categories.Find(category);
-            ctx.SaveChanges();
+            Category category = new Category();
 
+            var data = ctx.Categories.FirstOrDefault(x => x.Id == id);
+
+            if (category != null)
+            {
+                data.Title = category.Title;
+                data.Description = category.Description;
+                ctx.SaveChanges();
+            }
             return true;
         }
 

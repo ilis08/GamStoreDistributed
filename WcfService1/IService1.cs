@@ -26,7 +26,7 @@ namespace WcfService1
         string PostCategory(CategoryDTO categoryDTO);
 
         [OperationContract]
-        string PutCategory(CategoryDTO categoryDTO);
+        string PutCategory(int id);
 
         [OperationContract]
         CategoryDTO GetCategoryById(int id);
@@ -43,7 +43,7 @@ namespace WcfService1
         string PostGame(GameDTO gameDTO);
 
         [OperationContract]
-        string PutGame(GameDTO gameDTO);
+        string PutGame(int id);
 
         [OperationContract]
         GameDTO GetGameById(int id);

@@ -52,6 +52,8 @@ namespace MVC.Controllers
 
         }
 
+        
+
         public ActionResult Delete(int id)
         {
             using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())

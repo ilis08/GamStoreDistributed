@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,8 +54,10 @@
   <ItemGroup>
     <Compile Include="DTOs\CategoryDTO.cs" />
     <Compile Include="DTOs\GameDTO.cs" />
+    <Compile Include="DTOs\OrderDTO.cs" />
     <Compile Include="Implementations\CategoryManagementService.cs" />
     <Compile Include="Implementations\GameManagementService.cs" />
+    <Compile Include="Implementations\OrderManagementService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -47,5 +47,7 @@ namespace MVC.ViewModels
                 Description = gameDTO.Category.Description
             };
         }
+
+        public IEnumerable<GameDTO> allGames { get; set; }
     }
 }
