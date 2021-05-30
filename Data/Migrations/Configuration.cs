@@ -5,14 +5,14 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Data.Context.GameStoreDistributedDBContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Data.Context.GameStore1DistributedDBContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Data.Context.GameStoreDistributedDBContext context)
+        protected override void Seed(Data.Context.GameStore1DistributedDBContext context)
         {
             //  This method will be called after migrating to the latest version.
 

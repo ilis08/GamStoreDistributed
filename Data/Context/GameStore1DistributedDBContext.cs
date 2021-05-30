@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Context
 {
-    public class GameStoreDistributedDBContext : DbContext
+    public class GameStore1DistributedDBContext : DbContext
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Game> Games { get; set; }

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql.local",
+      "connectionId": "Server=(localdb)\\mssqllocaldb;Database=Data.Context.GameStoreDistributedDBContext;Trusted_Connection=True;MultipleActiveResultSets=true",
+      "secretStore": null
+    }
+  }
+}

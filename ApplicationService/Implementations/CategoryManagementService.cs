@@ -10,7 +10,7 @@ namespace ApplicationService.Implementations
 {
     public class CategoryManagementService
     {
-        private GameStoreDistributedDBContext ctx = new GameStoreDistributedDBContext();
+        private GameStore1DistributedDBContext ctx = new GameStore1DistributedDBContext();
         
         public List<CategoryDTO> Get()
         {
@@ -39,9 +39,20 @@ namespace ApplicationService.Implementations
             {
                 categoryDTO.Id = category.Id;
                 categoryDTO.Title = category.Title;
+                categoryDTO.Description = category.Description;
             }
             return categoryDTO;
         }
+
+        public bool Edit(int? id )
+        {
+            Category category = ctx.Categories.Find(id);
+            ctx.Categories.Find(category);
+            ctx.SaveChanges();
+
+            return true;
+        }
+
 
         public bool Save(CategoryDTO categoryDTO)
         {
@@ -64,7 +75,6 @@ namespace ApplicationService.Implementations
                 return false;
             }
         }
-
 
 
         public bool Delete(int id)
