@@ -14,14 +14,7 @@ namespace MVC.Controllers
 
         public ActionResult Index(int page = 1)
         {
-            using (ServiceReference1.Service1Client client = new ServiceReference1.Service1Client)
-            {
-                GamesListViewModel model = new GamesListViewModel
-                {
-                    Games = client.Games
-            }
-            }
-            
+            return View();
         }
 
         public ActionResult About()

@@ -10,7 +10,7 @@ namespace ApplicationService.Implementations
 {
     public class GameManagementService
     {
-        private GameStore1DistributedDBContext ctx = new GameStore1DistributedDBContext();
+        private GameStore2DistributedDBContext ctx = new GameStore2DistributedDBContext();
 
         public List<GameDTO> Get()
         {

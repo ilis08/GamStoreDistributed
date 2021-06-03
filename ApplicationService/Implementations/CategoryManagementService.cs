@@ -10,7 +10,7 @@ namespace ApplicationService.Implementations
 {
     public class CategoryManagementService
     {
-        private GameStore1DistributedDBContext ctx = new GameStore1DistributedDBContext();
+        private GameStore2DistributedDBContext ctx = new GameStore2DistributedDBContext();
         
         public List<CategoryDTO> Get()
         {
@@ -50,7 +50,7 @@ namespace ApplicationService.Implementations
 
             var data = ctx.Categories.FirstOrDefault(x => x.Id == id);
 
-            if (category != null)
+                       if (category != null)
             {
                 data.Title = category.Title;
                 data.Description = category.Description;

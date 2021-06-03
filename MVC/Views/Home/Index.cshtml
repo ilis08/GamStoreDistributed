@@ -7,21 +7,5 @@
 
 <body>
     <h2>All Games</h2>
-    <div>
-        @{
-            foreach (var item in Model)
-            {
-                <div class="well">
-                   
-                    <h4>
-                        <strong>@item.Name</strong>
-                    <span class="pull-right label label-primary" style="float:right">
-                        Price : @item.Price.ToString("c", CultureInfo.CreateSpecificCulture("en-US"))
-                    </span>
-                    </h4>
-                        <div class="lead">@item.ShortDescription</div>
-                </div>
-            }
-        }
-    </div>
+    
 </body>

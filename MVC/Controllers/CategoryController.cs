@@ -52,9 +52,35 @@ namespace MVC.Controllers
 
         }
 
-        
+        public ActionResult Edit(int id)
+        {
+            CategoryVM model = null;
+            using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
+            {
+                model = new CategoryVM(service.GetCategoryById(id));
+            }
+            return View(model);
+        }
 
-        public ActionResult Delete(int id)
+        [HttpPost, ActionName("Edit")]
+        public ActionResult Edit(CategoryVM model)
+        {
+            using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
+            {
+                service.GetCategories().Where(i => i.Id == model.Id).First();
+
+                CategoryDTO category = new CategoryDTO
+                {
+                    Id = model.Id,
+                    Title = model.Title,
+                    Description = model.Description
+                };
+                return View(category);
+            }
+           
+        }
+
+            public ActionResult Delete(int id)
         {
             using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
             {
