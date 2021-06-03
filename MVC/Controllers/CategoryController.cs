@@ -1,8 +1,11 @@
 ﻿using ApplicationService.DTOs;
 using MVC.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,94 +13,99 @@ namespace MVC.Controllers
 {
     public class CategoryController : Controller
     {
+        private readonly Uri url = new Uri("https://localhost:44331/api/category/");
         // GET: Category
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            List<CategoryVM> categoriesVM = new List<CategoryVM>();
-
-            using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
+            using (var client = new HttpClient())
             {
-                foreach (var item in service.GetCategories())
-                {
-                    categoriesVM.Add(new CategoryVM(item));
-                }
+                client.BaseAddress = url;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage responseMessage = await client.GetAsync("");
+
+                string jsonString = await responseMessage.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<List<CategoryVM>>(jsonString);
+
+                return View(responseData);
             }
-            return View(categoriesVM);
+            
         }
 
-        public ActionResult Create(CategoryVM categoryVM)
+        public async Task<ActionResult> Details(int id)
         {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = url;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage responseMessage = await client.GetAsync(""+id);
+
+                string jsonString = await responseMessage.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<CategoryVM>(jsonString);
+
+                return View(responseData);
+            }
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(CategoryVM categoryVM)
+        {
+           
             try
             {
-                if (ModelState.IsValid)
+                using (var client = new HttpClient())
                 {
-                    using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
-                    {
-                        CategoryDTO categoryDTO = new CategoryDTO
-                        {
-                            Title = categoryVM.Title,
-                            Description = categoryVM.Description
-                        };
-                        service.PostCategory(categoryDTO);
+                    client.BaseAddress = url;
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                        return RedirectToAction("Index");
-                    }
+                    var content = JsonConvert.SerializeObject(categoryVM);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(content);
+                    var byteContent = new ByteArrayContent(buffer);
+
+                    byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                    
+                    HttpResponseMessage responseMessage = await client.PostAsync("", byteContent);
                 }
-                return View();
+                return RedirectToAction("Index");
             }
             catch (Exception)
             {
                 return View();
             }
-
+            
         }
 
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            CategoryVM model = null;
-            using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
+            try
             {
-                model = new CategoryVM(service.GetCategoryById(id));
-            }
-            return View(model);
-        }
-
-        [HttpPost, ActionName("Edit")]
-        public ActionResult Edit(CategoryVM model)
-        {
-            using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
-            {
-                service.GetCategories().Where(i => i.Id == model.Id).First();
-
-                CategoryDTO category = new CategoryDTO
+                using (var client = new HttpClient())
                 {
-                    Id = model.Id,
-                    Title = model.Title,
-                    Description = model.Description
-                };
-                return View(category);
-            }
-           
-        }
+                    client.BaseAddress = url;
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-            public ActionResult Delete(int id)
-        {
-            using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
+                    HttpResponseMessage responseMessage = await client.DeleteAsync("" + id);
+
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
             {
-                service.DeleteCategory(id);
+                return View();
+                throw;
             }
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult Details(int id)
-        {
-            CategoryVM model;
-            using (ServiceReference1.Service1Client service = new ServiceReference1.Service1Client())
-            {
-                 model = new CategoryVM(service.GetCategoryById(id));
-            }
-
-            return View(model);
+            
+            
         }
     } 
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MVC.ViewModels
 {
@@ -21,9 +22,12 @@ namespace MVC.ViewModels
 
         public double Price { get; set; }
 
+        [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
-        public CategoryVM CategoryVM { get; set; }
+        public CategoryVM Category { get; set; }
+
+        public SelectList CategorySelectList { get; set; }
 
         public GameVM()
         {
@@ -38,9 +42,9 @@ namespace MVC.ViewModels
             LongDescription = gameDTO.LongDescription;
             Release = gameDTO.Release;
             Price = gameDTO.Price;
-            CategoryId = gameDTO.CategoryId;
+            CategoryId = gameDTO.Category.Id;
 
-            CategoryVM = new CategoryVM
+            Category = new CategoryVM
             {
                 Id = gameDTO.Category.Id,
                 Title = gameDTO.Category.Title,

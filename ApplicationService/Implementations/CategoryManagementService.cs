@@ -67,7 +67,15 @@ namespace ApplicationService.Implementations
             {
                 using (UnitOfWork unitOfWork = new UnitOfWork())
                 {
-                    unitOfWork.CategoryRepository.Insert(Category);
+                    if (categoryDTO.Id == 0)
+                    {
+                        unitOfWork.CategoryRepository.Insert(Category);
+                    }
+                    else
+                    {
+                        unitOfWork.CategoryRepository.Update(Category);
+                    }
+                    
                     unitOfWork.Save();
                 }
 

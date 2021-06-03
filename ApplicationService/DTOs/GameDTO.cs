@@ -13,7 +13,6 @@ namespace ApplicationService.DTOs
         public DateTime? Release { get; set; }
         public double Price { get; set; }
 
-        public int CategoryId { get; set; }
         public virtual CategoryDTO Category { get; set; }
     }
 }

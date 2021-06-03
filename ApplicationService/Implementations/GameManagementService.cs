@@ -1,6 +1,7 @@
 ﻿using ApplicationService.DTOs;
 using Data.Context;
 using Data.Entities;
+using Repositories.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,64 +17,67 @@ namespace ApplicationService.Implementations
         {
             List<GameDTO> gamesDto = new List<GameDTO>();
 
-            foreach (var item in ctx.Games.ToList())
+            using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                gamesDto.Add(new GameDTO
+                foreach (var item in unitOfWork.GameRepository.Get())
                 {
+                    gamesDto.Add(new GameDTO
+                    {
                         Id = item.Id,
                         Name = item.Name,
                         ShortDescription = item.ShortDescription,
                         LongDescription = item.LongDescription,
                         Release = item.Release,
                         Price = item.Price,
-                        CategoryId = item.CategoryId,
                         Category = new CategoryDTO
                         {
                             Id = item.CategoryId,
                             Title = item.Category.Title,
                             Description = item.Category.Description
                         }
-                 });
+                    });
+                }
             }
             return gamesDto;
         }
 
         public GameDTO GetById(int id)
         {
-            Game game = ctx.Games.Find(id);
+            GameDTO gameDTO = new GameDTO();
 
-            GameDTO gameDTO = new GameDTO
+            using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                Id = game.Id,
-                Name = game.Name,
-                ShortDescription = game.ShortDescription,
-                LongDescription = game.LongDescription,
-                Release = game.Release,
-                Price = game.Price,
-                CategoryId = game.CategoryId,
-                Category = new CategoryDTO
+                Game game = unitOfWork.GameRepository.GetByID(id);
+
+                if (game != null)
                 {
-                    Id = game.CategoryId,
-                    Title = game.Category.Title,
-                    Description = game.Category.Description
+                    gameDTO = new GameDTO
+                    {
+                        Id = game.Id,
+                        Name = game.Name,
+                        ShortDescription = game.ShortDescription,
+                        LongDescription = game.LongDescription,
+                        Release = game.Release,
+                        Price = game.Price,
+                        Category = new CategoryDTO
+                        {
+                            Id = game.CategoryId,
+                            Title = game.Category.Title,
+                            Description = game.Category.Description
+                        }
+                    };
                 }
-            };
+            }
             return gameDTO;
         }
 
         public bool Save(GameDTO gameDto)
         {
-            if (gameDto.Category == null || gameDto.CategoryId == 0)
+            Category category = new Category
             {
-                return false;
-            }
-
-           /* Category category = new Category
-            {
-                Id = gameDto.CategoryId,
                 Title = gameDto.Category.Title,
                 Description = gameDto.Category.Description
-            };*/
+            };
 
             Game game = new Game
             {
@@ -82,13 +86,23 @@ namespace ApplicationService.Implementations
                 LongDescription = gameDto.LongDescription,
                 Release = gameDto.Release,
                 Price = gameDto.Price,
-                CategoryId = gameDto.CategoryId
+                CategoryId = gameDto.Category.Id
             };
 
             try
             {
-                ctx.Games.Add(game);
-                ctx.SaveChanges();
+                using (UnitOfWork unitOfWork = new UnitOfWork())
+                {
+                    if (gameDto.Id == 0)
+                    {
+                        unitOfWork.GameRepository.Insert(game);
+                    }
+                    else
+                    {
+                        unitOfWork.GameRepository.Update(game);
+                    }
+                    unitOfWork.Save();
+                }
 
                 return true;
             }
@@ -102,9 +116,12 @@ namespace ApplicationService.Implementations
         {
             try
             {
-                Game game = ctx.Games.Find(id);
-                ctx.Games.Remove(game);
-                ctx.SaveChanges();
+                using (UnitOfWork unitOfWork = new UnitOfWork())
+                {
+                    Game game = unitOfWork.GameRepository.GetByID(id);
+                    unitOfWork.GameRepository.Delete(game);
+                    unitOfWork.Save();
+                }
 
                 return true;
             }

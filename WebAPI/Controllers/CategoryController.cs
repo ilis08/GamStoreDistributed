@@ -36,9 +36,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IHttpActionResult Save(CategoryDTO categoryDto)
         {
-            if (categoryDto.Title == null || categoryDto.Description == null)
+            if (categoryDto.Title == null && categoryDto.Description == null)
             {
                 return Json(new ResponseMessage { Code = 500, Error = "Data is not valid" });
             }
@@ -47,22 +48,35 @@ namespace WebAPI.Controllers
 
             if (_service.Save(categoryDto))
             {
-                response.Code = 200;
+                response.Code = 201;
                 response.Body = "Category was saved";
             }
             else
             {
-                response.Code = 500;
+                response.Code = 200;
                 response.Body = "Category was not saved";
             }
 
             return Json(response);
         }
 
+        [Route("{id}")]
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
-            return Json(_service.Delete(id));
+            ResponseMessage response = new ResponseMessage();
+
+            if (_service.Delete(id))
+            {
+                response.Code = 200;
+                response.Body = "Category has been deleted";
+            }
+            else
+            {
+                response.Code = 200;
+                response.Body = "category has not been saved";
+            }
+            return Json(response);
         }
     }
 }
