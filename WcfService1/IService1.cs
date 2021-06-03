@@ -26,9 +26,6 @@ namespace WcfService1
         string PostCategory(CategoryDTO categoryDTO);
 
         [OperationContract]
-        string PutCategory(int id);
-
-        [OperationContract]
         CategoryDTO GetCategoryById(int id);
 
         [OperationContract]

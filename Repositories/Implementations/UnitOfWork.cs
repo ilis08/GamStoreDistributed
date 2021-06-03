@@ -30,7 +30,7 @@ namespace Repositories.Implementations
         }
 
 
-        public GenericRepository<Category> BrandRepository
+        public GenericRepository<Category> CategoryRepository
         {
             get
             {
@@ -43,7 +43,7 @@ namespace Repositories.Implementations
         }
 
 
-        public GenericRepository<Order> KindRepository
+        public GenericRepository<Order> OrderRepository
         {
             get
             {

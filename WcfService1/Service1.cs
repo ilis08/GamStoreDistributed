@@ -54,18 +54,6 @@ namespace WcfService1
             return categoryService.GetById(id);
         }
 
-        public string PutCategory(int id)
-        {
-            if (!categoryService.Edit(id))
-            {
-                return "Is not saved";
-            }
-            else
-            {
-                return "Saved";
-            }
-        }
-
         public string PostCategory(CategoryDTO categoryDto)
         {
             if (!categoryService.Save(categoryDto))

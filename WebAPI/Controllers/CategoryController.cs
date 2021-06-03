@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using WebAPI.Messages;
 
 namespace WebAPI.Controllers
 {
@@ -35,6 +35,34 @@ namespace WebAPI.Controllers
             return Json(_service.GetById(id));
         }
 
-        
+        [HttpPost]
+        public IHttpActionResult Save(CategoryDTO categoryDto)
+        {
+            if (categoryDto.Title == null || categoryDto.Description == null)
+            {
+                return Json(new ResponseMessage { Code = 500, Error = "Data is not valid" });
+            }
+
+            ResponseMessage response = new ResponseMessage();
+
+            if (_service.Save(categoryDto))
+            {
+                response.Code = 200;
+                response.Body = "Category was saved";
+            }
+            else
+            {
+                response.Code = 500;
+                response.Body = "Category was not saved";
+            }
+
+            return Json(response);
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
+        {
+            return Json(_service.Delete(id));
+        }
     }
 }

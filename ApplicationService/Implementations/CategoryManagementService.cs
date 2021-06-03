@@ -1,6 +1,7 @@
 ﻿using ApplicationService.DTOs;
 using Data.Context;
 using Data.Entities;
+using Repositories.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +17,17 @@ namespace ApplicationService.Implementations
         {
             List<CategoryDTO> categoriesDto = new List<CategoryDTO>();
 
-            foreach (var item in ctx.Categories.ToList())
+            using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                categoriesDto.Add(new CategoryDTO
+                foreach (var item in unitOfWork.CategoryRepository.Get())
                 {
-                    Id = item.Id,
-                    Title = item.Title,
-                    Description = item.Description
-                });
-
+                    categoriesDto.Add(new CategoryDTO
+                    {
+                        Id = item.Id,
+                        Title = item.Title,
+                        Description = item.Description
+                    });
+                }
             }
 
             return categoriesDto;
@@ -34,31 +37,23 @@ namespace ApplicationService.Implementations
         {
             CategoryDTO categoryDTO = new CategoryDTO();
 
-            Category category = ctx.Categories.Find(id);
-            if (category != null)
+            using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                categoryDTO.Id = category.Id;
-                categoryDTO.Title = category.Title;
-                categoryDTO.Description = category.Description;
+                Category category = unitOfWork.CategoryRepository.GetByID(id);
+
+                if (category != null)
+                {
+                    categoryDTO = new CategoryDTO
+                    {
+                        Id = category.Id,
+                        Title = category.Title,
+                        Description = category.Description
+                    };
+                }
             }
+
             return categoryDTO;
         }
-
-        public bool Edit(int? id)
-        {
-            Category category = new Category();
-
-            var data = ctx.Categories.FirstOrDefault(x => x.Id == id);
-
-                       if (category != null)
-            {
-                data.Title = category.Title;
-                data.Description = category.Description;
-                ctx.SaveChanges();
-            }
-            return true;
-        }
-
 
         public bool Save(CategoryDTO categoryDTO)
         {
@@ -70,9 +65,12 @@ namespace ApplicationService.Implementations
 
             try
             {
-                Console.WriteLine(Category);
-                ctx.Categories.Add(Category);
-                ctx.SaveChanges();
+                using (UnitOfWork unitOfWork = new UnitOfWork())
+                {
+                    unitOfWork.CategoryRepository.Insert(Category);
+                    unitOfWork.Save();
+                }
+
                 return true;
             }
             catch
@@ -85,13 +83,15 @@ namespace ApplicationService.Implementations
 
         public bool Delete(int id)
         {
-            try
-            {
-                Category category = ctx.Categories.Find(id);
-                ctx.Categories.Remove(category);
-                ctx.SaveChanges();
-
-                return true;
+            try 
+            { 
+                using (UnitOfWork unitOfWork = new UnitOfWork())
+                {
+                     Category category = unitOfWork.CategoryRepository.GetByID(id);
+                    unitOfWork.CategoryRepository.Delete(category);
+                    unitOfWork.Save();
+                }
+            return true;
             }
             catch
             {
