@@ -1,6 +1,7 @@
 ﻿using ApplicationService.DTOs;
 using Data.Context;
 using Data.Entities;
+using Repositories.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,85 +18,91 @@ namespace ApplicationService.Implementations
         {
             List<OrderDTO> orderDto = new List<OrderDTO>();
 
-            foreach (var item in ctx.Orders.ToList())
+            using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                orderDto.Add(new OrderDTO
+                foreach (var item in unitOfWork.OrderRepository.Get())
                 {
-                    Id = item.Id,
-                    BuyerName = item.BuyerName,
-                    Address = item.Address,
-                    Phone = item.Phone,
-                    Email = item.Email,
-                    TimeOfOrder = item.TimeOfOrder,
-                    GameId = item.GameId,
-                    Game = new GameDTO
+                    orderDto.Add(new OrderDTO
                     {
-                        Id = item.GameId,
-                        Name = item.Game.Name,
-                        ShortDescription = item.Game.ShortDescription,
-                        LongDescription = item.Game.LongDescription,
-                        Release = item.Game.Release,
-                        Price = item.Game.Price
-                    }
-                });
+                        Id = item.Id,
+                        BuyerName = item.BuyerName,
+                        Address = item.Address,
+                        Phone = item.Phone,
+                        Email = item.Email,
+                        Game = new GameDTO
+                        {
+                            Id = item.Game.Id,
+                            Name = item.Game.Name,
+                            ShortDescription = item.Game.ShortDescription,
+                            LongDescription = item.Game.LongDescription,
+                            Release = item.Game.Release,
+                            Price = item.Game.Price
+                        }
+                    });
+                }
             }
             return orderDto;
         }
 
         public OrderDTO GetById(int id)
         {
-             Order order = ctx.Orders.Find(id);
+            OrderDTO orderDto = new OrderDTO();
 
-            OrderDTO orderDTO = new OrderDTO
+            using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                Id = order.Id,
-                BuyerName = order.BuyerName,
-                Address = order.Address,
-                Phone = order.Phone,
-                Email = order.Email,
-                TimeOfOrder = order.TimeOfOrder,
-                GameId = order.GameId,
-                Game = new GameDTO
+                Order order = unitOfWork.OrderRepository.GetByID(id);
+
+                if (order != null)
                 {
-                    Id = order.GameId,
-                    Name = order.Game.Name,
-                    ShortDescription = order.Game.ShortDescription,
-                    LongDescription = order.Game.LongDescription,
-                    Release = order.Game.Release,
-                    Price = order.Game.Price
+                    orderDto = new OrderDTO
+                    {
+                        Id = order.Id,
+                        BuyerName = order.BuyerName,
+                        Address = order.Address,
+                        Phone = order.Phone,
+                        Email = order.Email,
+                        Game = new GameDTO
+                        {
+                            Id = order.Game.Id,
+                            Name = order.Game.Name,
+                            ShortDescription = order.Game.ShortDescription,
+                            LongDescription = order.Game.LongDescription,
+                            Release = order.Game.Release,
+                            Price = order.Game.Price
+                        }
+                    };
                 }
-            };
-            return orderDTO;
+            }
+            return orderDto;
         }
 
         public bool Save(OrderDTO orderDto)
         {
-            if (orderDto.Game == null || orderDto.GameId == 0)
-            {
-                return false;
-            }
-
-            /* Category category = new Category
-             {
-                 Id = gameDto.CategoryId,
-                 Title = gameDto.Category.Title,
-                 Description = gameDto.Category.Description
-             };*/
 
             Order order = new Order
             {
+                Id = orderDto.Id,
                 BuyerName = orderDto.BuyerName,
                 Address = orderDto.Address,
                 Phone = orderDto.Phone,
                 Email = orderDto.Email,
-                TimeOfOrder = orderDto.TimeOfOrder,
-                GameId = orderDto.GameId,
+                GameId = orderDto.Game.Id
             };
 
             try
             {
-                ctx.Orders.Add(order);
-                ctx.SaveChanges();
+                using (UnitOfWork unitOfWork = new UnitOfWork())
+                {
+                    if (orderDto.Id == 0)
+                    {
+                        unitOfWork.OrderRepository.Insert(order);
+                    }
+                    else
+                    {
+                        unitOfWork.OrderRepository.Update(order);
+                    }
+                    unitOfWork.Save();
+                }
 
                 return true;
             }
@@ -109,9 +116,12 @@ namespace ApplicationService.Implementations
         {
             try
             {
-                Order order = ctx.Orders.Find(id);
-                ctx.Orders.Remove(order);
-                ctx.SaveChanges();
+                using (UnitOfWork unitOfWork = new UnitOfWork())
+                {
+                    Order order = unitOfWork.OrderRepository.GetByID(id);
+                    unitOfWork.OrderRepository.Delete(order);
+                    unitOfWork.Save();
+                }
 
                 return true;
             }

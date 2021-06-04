@@ -18,8 +18,9 @@ namespace Data.Entities
         public double Price { get; set; }
 
         public int CategoryId { get; set; }
+
         public virtual Category Category { get; set; }
 
-        public ICollection<Order> Order { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

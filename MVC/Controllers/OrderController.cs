@@ -1,20 +1,20 @@
-﻿using ApplicationService.DTOs;
-using MVC.ViewModels;
+﻿using MVC.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace MVC.Controllers
 {
-    public class CategoryController : Controller
+    public class OrderController : Controller
     {
-        private readonly Uri url = new Uri("https://localhost:44331/api/category/");
-        // GET: Category
+        private readonly Uri url = new Uri("https://localhost:44331/api/");
+        // GET: Order
         public async Task<ActionResult> Index()
         {
             using (var client = new HttpClient())
@@ -23,14 +23,13 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync("");
+                HttpResponseMessage responseMessage = await client.GetAsync("order");
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<List<CategoryVM>>(jsonString);
+                var responseData = JsonConvert.DeserializeObject<List<OrderVM>>(jsonString);
 
                 return View(responseData);
             }
-            
         }
 
         public async Task<ActionResult> Details(int id)
@@ -41,10 +40,10 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync(""+id);
+                HttpResponseMessage responseMessage = await client.GetAsync("order/" + id);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<CategoryVM>(jsonString);
+                var responseData = JsonConvert.DeserializeObject<OrderVM>(jsonString);
 
                 return View(responseData);
             }
@@ -53,22 +52,32 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = url;
                 client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage responseMessage = await client.GetAsync("" + id);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage responseMessage = await client.GetAsync("order/" + id);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<CategoryVM>(jsonString);
+                var orderVM = JsonConvert.DeserializeObject<OrderVM>(jsonString);
 
-                return View(responseData);
+                responseMessage = await client.GetAsync("game");
+                jsonString = await responseMessage.Content.ReadAsStringAsync();
+                List<GameVM> games = JsonConvert.DeserializeObject<List<GameVM>>(jsonString);
+                orderVM.GameSelectList = new SelectList(
+                    games,
+                    "Id",
+                    "Name");
+
+                return View(orderVM);
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(CategoryVM categoryVM)
+        public async Task<ActionResult> Edit(OrderVM orderVM)
         {
             try
             {
@@ -76,18 +85,18 @@ namespace MVC.Controllers
                 {
                     client.BaseAddress = url;
                     client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var content = JsonConvert.SerializeObject(categoryVM);
+                    var content = JsonConvert.SerializeObject(orderVM);
                     var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                     var byteContent = new ByteArrayContent(buffer);
 
                     byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-                    HttpResponseMessage responseMessage = await client.PostAsync("", byteContent);
+                    HttpResponseMessage responseMessage = await client.PostAsync("order", byteContent);
 
                     string jsonString = await responseMessage.Content.ReadAsStringAsync();
-                    var responseData = JsonConvert.DeserializeObject<CategoryVM>(jsonString);
+                    var responseData = JsonConvert.DeserializeObject<OrderVM>(jsonString);
                 }
                 return RedirectToAction("Index");
             }
@@ -97,15 +106,33 @@ namespace MVC.Controllers
             }
         }
 
-        public ActionResult Create()
+        [HttpGet]
+        public async Task<ActionResult> Create()
         {
-            return View();
+            OrderVM orderVM = new OrderVM();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = url;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage responseMessage = await client.GetAsync("game");
+                string jsonString = await responseMessage.Content.ReadAsStringAsync();
+                List<GameVM> games = JsonConvert.DeserializeObject<List<GameVM>>(jsonString);
+                orderVM.GameSelectList = new SelectList(
+                    games,
+                    "Id",
+                    "Name");
+
+                return View(orderVM);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CategoryVM categoryVM)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(OrderVM orderVM)
         {
-           
             try
             {
                 using (var client = new HttpClient())
@@ -114,21 +141,24 @@ namespace MVC.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var content = JsonConvert.SerializeObject(categoryVM);
+                    var content = JsonConvert.SerializeObject(orderVM);
                     var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                     var byteContent = new ByteArrayContent(buffer);
 
                     byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                    
-                    HttpResponseMessage responseMessage = await client.PostAsync("", byteContent);
+
+                    HttpResponseMessage responseMessage = await client.PostAsync("order", byteContent);
+
+                    string jsonString = await responseMessage.Content.ReadAsStringAsync();
+                    var responseData = JsonConvert.DeserializeObject<OrderVM>(jsonString);
                 }
                 return RedirectToAction("Index");
             }
+
             catch (Exception)
             {
                 return View();
             }
-            
         }
 
         public async Task<ActionResult> Delete(int id)
@@ -141,7 +171,7 @@ namespace MVC.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage responseMessage = await client.DeleteAsync("" + id);
+                    HttpResponseMessage responseMessage = await client.DeleteAsync("order/" + id);
 
                 }
                 return RedirectToAction("Index");
@@ -151,8 +181,6 @@ namespace MVC.Controllers
                 return View();
                 throw;
             }
-            
-            
         }
-    } 
+    }
 }

@@ -31,7 +31,7 @@ namespace ApplicationService.Implementations
                         Price = item.Price,
                         Category = new CategoryDTO
                         {
-                            Id = item.CategoryId,
+                            Id = item.Category.Id,
                             Title = item.Category.Title,
                             Description = item.Category.Description
                         }
@@ -49,8 +49,6 @@ namespace ApplicationService.Implementations
             {
                 Game game = unitOfWork.GameRepository.GetByID(id);
 
-                if (game != null)
-                {
                     gameDTO = new GameDTO
                     {
                         Id = game.Id,
@@ -61,26 +59,20 @@ namespace ApplicationService.Implementations
                         Price = game.Price,
                         Category = new CategoryDTO
                         {
-                            Id = game.CategoryId,
+                            Id = game.Category.Id,
                             Title = game.Category.Title,
                             Description = game.Category.Description
                         }
                     };
-                }
             }
             return gameDTO;
         }
 
         public bool Save(GameDTO gameDto)
         {
-            Category category = new Category
-            {
-                Title = gameDto.Category.Title,
-                Description = gameDto.Category.Description
-            };
-
             Game game = new Game
             {
+                Id = gameDto.Id,
                 Name = gameDto.Name,
                 ShortDescription = gameDto.ShortDescription,
                 LongDescription = gameDto.LongDescription,

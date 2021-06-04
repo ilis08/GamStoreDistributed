@@ -64,6 +64,26 @@
     <Compile Include="Migrations\202105311020400_Second.designer.cs">
       <DependentUpon>202105311020400_Second.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202106031917489_Last.cs" />
+    <Compile Include="Migrations\202106031917489_Last.designer.cs">
+      <DependentUpon>202106031917489_Last.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106031925135_Last2.cs" />
+    <Compile Include="Migrations\202106031925135_Last2.designer.cs">
+      <DependentUpon>202106031925135_Last2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106041207434_Last3.cs" />
+    <Compile Include="Migrations\202106041207434_Last3.designer.cs">
+      <DependentUpon>202106041207434_Last3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106041213308_Last4.cs" />
+    <Compile Include="Migrations\202106041213308_Last4.designer.cs">
+      <DependentUpon>202106041213308_Last4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106041455367_Last5.cs" />
+    <Compile Include="Migrations\202106041455367_Last5.designer.cs">
+      <DependentUpon>202106041455367_Last5.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -77,6 +97,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105311020400_Second.resx">
       <DependentUpon>202105311020400_Second.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106031917489_Last.resx">
+      <DependentUpon>202106031917489_Last.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106031925135_Last2.resx">
+      <DependentUpon>202106031925135_Last2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106041207434_Last3.resx">
+      <DependentUpon>202106041207434_Last3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106041213308_Last4.resx">
+      <DependentUpon>202106041213308_Last4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106041455367_Last5.resx">
+      <DependentUpon>202106041455367_Last5.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

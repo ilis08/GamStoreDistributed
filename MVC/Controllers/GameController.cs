@@ -42,7 +42,7 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync("games" + id);
+                HttpResponseMessage responseMessage = await client.GetAsync("game/"+id);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<GameVM>(jsonString);
@@ -50,6 +50,64 @@ namespace MVC.Controllers
                 return View(responseData);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(int id)
+        {
+   
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = url;
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage responseMessage = await client.GetAsync("game/"+id);
+                
+                string jsonString = await responseMessage.Content.ReadAsStringAsync();
+                var gameVM = JsonConvert.DeserializeObject<GameVM>(jsonString);
+
+                responseMessage = await client.GetAsync("category");
+                jsonString = await responseMessage.Content.ReadAsStringAsync();
+                List<CategoryVM> categories = JsonConvert.DeserializeObject<List<CategoryVM>>(jsonString);
+                gameVM.CategorySelectList = new SelectList(
+                    categories,
+                    "Id",
+                    "Title");
+
+                return View(gameVM);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(GameVM gameVM)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = url;
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var content = JsonConvert.SerializeObject(gameVM);
+                    var buffer = System.Text.Encoding.UTF8.GetBytes(content);
+                    var byteContent = new ByteArrayContent(buffer);
+
+                    byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                    HttpResponseMessage responseMessage = await client.PostAsync("game", byteContent);
+
+                    string jsonString = await responseMessage.Content.ReadAsStringAsync();
+                    var responseData = JsonConvert.DeserializeObject<GameVM>(jsonString);
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
+
 
         [HttpGet]
         public async Task<ActionResult> Create()
@@ -116,7 +174,7 @@ namespace MVC.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage responseMessage = await client.DeleteAsync("" + id);
+                    HttpResponseMessage responseMessage = await client.DeleteAsync("game/" + id);
 
                 }
                 return RedirectToAction("Index");

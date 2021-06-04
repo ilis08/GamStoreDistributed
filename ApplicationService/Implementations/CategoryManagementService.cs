@@ -59,6 +59,7 @@ namespace ApplicationService.Implementations
         {
             Category Category = new Category()
             {
+                Id = categoryDTO.Id,
                 Title = categoryDTO.Title,
                 Description = categoryDTO.Description
             };

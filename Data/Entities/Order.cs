@@ -13,7 +13,7 @@ namespace Data.Entities
         [StringLength(25)]
         [Required]
         public string BuyerName { get; set; }
-
+        [Required]
         public string Address { get; set; }
 
         public string Phone { get; set; }
@@ -21,12 +21,7 @@ namespace Data.Entities
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [BindNever]
-        [ScaffoldColumn(false)]
-        public DateTime TimeOfOrder { get; set; }
-
         public int GameId { get; set; }
-
         public virtual Game Game { get; set; }
     }
 }
