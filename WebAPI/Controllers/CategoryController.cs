@@ -23,9 +23,9 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("")]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(string query)
         {
-            return Json(_service.Get());
+            return Json(_service.Get(query));
         }
 
         [HttpGet]

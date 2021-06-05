@@ -14,32 +14,59 @@ namespace ApplicationService.Implementations
     {
         private GameStore2DistributedDBContext ctx = new GameStore2DistributedDBContext();
 
-        public List<OrderDTO> Get()
+        public List<OrderDTO> Get(string query)
         {
             List<OrderDTO> orderDto = new List<OrderDTO>();
 
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                foreach (var item in unitOfWork.OrderRepository.Get())
+                if (query == null)
                 {
-                    orderDto.Add(new OrderDTO
+                    foreach (var item in unitOfWork.OrderRepository.Get())
                     {
-                        Id = item.Id,
-                        BuyerName = item.BuyerName,
-                        Address = item.Address,
-                        Phone = item.Phone,
-                        Email = item.Email,
-                        Game = new GameDTO
+                        orderDto.Add(new OrderDTO
                         {
-                            Id = item.Game.Id,
-                            Name = item.Game.Name,
-                            ShortDescription = item.Game.ShortDescription,
-                            LongDescription = item.Game.LongDescription,
-                            Release = item.Game.Release,
-                            Price = item.Game.Price
-                        }
-                    });
+                            Id = item.Id,
+                            BuyerName = item.BuyerName,
+                            Address = item.Address,
+                            Phone = item.Phone,
+                            Email = item.Email,
+                            Game = new GameDTO
+                            {
+                                Id = item.Game.Id,
+                                Name = item.Game.Name,
+                                ShortDescription = item.Game.ShortDescription,
+                                LongDescription = item.Game.LongDescription,
+                                Release = item.Game.Release,
+                                Price = item.Game.Price
+                            }
+                        });
+                    }
                 }
+                else
+                {
+                    foreach (var item in unitOfWork.OrderRepository.GetByQuery().Where(c => c.BuyerName.Contains(query)).ToList())
+                    {
+                        orderDto.Add(new OrderDTO
+                        {
+                            Id = item.Id,
+                            BuyerName = item.BuyerName,
+                            Address = item.Address,
+                            Phone = item.Phone,
+                            Email = item.Email,
+                            Game = new GameDTO
+                            {
+                                Id = item.Game.Id,
+                                Name = item.Game.Name,
+                                ShortDescription = item.Game.ShortDescription,
+                                LongDescription = item.Game.LongDescription,
+                                Release = item.Game.Release,
+                                Price = item.Game.Price
+                            }
+                        });
+                    }
+                }
+                
             }
             return orderDto;
         }

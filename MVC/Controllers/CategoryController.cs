@@ -13,9 +13,9 @@ namespace MVC.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly Uri url = new Uri("https://localhost:44331/api/category/");
+        private readonly Uri url = new Uri("https://localhost:44331/api/category");
         // GET: Category
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string query)
         {
             using (var client = new HttpClient())
             {
@@ -23,16 +23,16 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync("");
+                HttpResponseMessage responseMessage = await client.GetAsync("?query="+query);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<List<CategoryVM>>(jsonString);
 
                 return View(responseData);
             }
-            
         }
 
+        [HttpGet]
         public async Task<ActionResult> Details(int id)
         {
             using (var client = new HttpClient())
@@ -41,7 +41,7 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync(""+id);
+                HttpResponseMessage responseMessage = await client.GetAsync("category/" +id);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<CategoryVM>(jsonString);
@@ -58,7 +58,7 @@ namespace MVC.Controllers
                 client.BaseAddress = url;
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage responseMessage = await client.GetAsync("" + id);
+                HttpResponseMessage responseMessage = await client.GetAsync("category/" + id);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<CategoryVM>(jsonString);
@@ -84,7 +84,7 @@ namespace MVC.Controllers
 
                     byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-                    HttpResponseMessage responseMessage = await client.PostAsync("", byteContent);
+                    HttpResponseMessage responseMessage = await client.PostAsync("category/", byteContent);
 
                     string jsonString = await responseMessage.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<CategoryVM>(jsonString);
@@ -120,7 +120,7 @@ namespace MVC.Controllers
 
                     byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                     
-                    HttpResponseMessage responseMessage = await client.PostAsync("", byteContent);
+                    HttpResponseMessage responseMessage = await client.PostAsync("category/", byteContent);
                 }
                 return RedirectToAction("Index");
             }
@@ -141,7 +141,7 @@ namespace MVC.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage responseMessage = await client.DeleteAsync("" + id);
+                    HttpResponseMessage responseMessage = await client.DeleteAsync("category/" + id);
 
                 }
                 return RedirectToAction("Index");

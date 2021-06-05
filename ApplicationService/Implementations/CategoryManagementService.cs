@@ -12,26 +12,42 @@ namespace ApplicationService.Implementations
     public class CategoryManagementService
     {
         private GameStore2DistributedDBContext ctx = new GameStore2DistributedDBContext();
-        
-        public List<CategoryDTO> Get()
+
+        public List<CategoryDTO> Get(string query)
         {
             List<CategoryDTO> categoriesDto = new List<CategoryDTO>();
 
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                foreach (var item in unitOfWork.CategoryRepository.Get())
+                if (query == null)
                 {
-                    categoriesDto.Add(new CategoryDTO
+                    foreach (var item in unitOfWork.CategoryRepository.Get())
                     {
-                        Id = item.Id,
-                        Title = item.Title,
-                        Description = item.Description
-                    });
+                        categoriesDto.Add(new CategoryDTO
+                        {
+                            Id = item.Id,
+                            Title = item.Title,
+                            Description = item.Description
+                        });
+                    }
+                }
+                else
+                {
+                    foreach (var item in unitOfWork.CategoryRepository.GetByQuery().Where(c => c.Title.Contains(query)).ToList())
+                    {
+                        categoriesDto.Add(new CategoryDTO
+                        {
+                            Id = item.Id,
+                            Title = item.Title,
+                            Description = item.Description
+                        });
+                    }
                 }
             }
-
             return categoriesDto;
         }
+
+        
 
         public CategoryDTO GetById(int id)
         {

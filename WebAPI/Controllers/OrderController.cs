@@ -22,9 +22,9 @@ namespace WebAPI.Controllers
 
         [Route("")]
         [HttpGet]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(string query)
         {
-            return Json(_service.Get());
+            return Json(_service.Get(query));
         }
         [Route("{id}")]
         [HttpGet]

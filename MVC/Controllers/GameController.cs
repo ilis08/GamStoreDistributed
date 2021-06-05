@@ -15,9 +15,9 @@ namespace MVC.Controllers
 {
     public class GameController : Controller
     {
-        private readonly Uri url = new Uri("https://localhost:44331/api/");
+        private readonly Uri url = new Uri("https://localhost:44331/api");
         // GET: Game
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string query)
         {
             using (var client = new HttpClient())
             {
@@ -25,7 +25,7 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync("game");
+                HttpResponseMessage responseMessage = await client.GetAsync("api/game?query=" + query);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<List<GameVM>>(jsonString);
@@ -42,7 +42,7 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync("game/"+id);
+                HttpResponseMessage responseMessage = await client.GetAsync("api/game/"+id);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<GameVM>(jsonString);
@@ -52,7 +52,7 @@ namespace MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id, string query)
         {
    
             using (var client = new HttpClient())
@@ -61,12 +61,12 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync("game/"+id);
+                HttpResponseMessage responseMessage = await client.GetAsync("api/game/"+id);
                 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 var gameVM = JsonConvert.DeserializeObject<GameVM>(jsonString);
 
-                responseMessage = await client.GetAsync("category");
+                responseMessage = await client.GetAsync("api/category?query="+ query);
                 jsonString = await responseMessage.Content.ReadAsStringAsync();
                 List<CategoryVM> categories = JsonConvert.DeserializeObject<List<CategoryVM>>(jsonString);
                 gameVM.CategorySelectList = new SelectList(
@@ -95,7 +95,7 @@ namespace MVC.Controllers
 
                     byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-                    HttpResponseMessage responseMessage = await client.PostAsync("game", byteContent);
+                    HttpResponseMessage responseMessage = await client.PostAsync("api/game", byteContent);
 
                     string jsonString = await responseMessage.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<GameVM>(jsonString);
@@ -110,7 +110,7 @@ namespace MVC.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(string query)
         {
             GameVM gameVM = new GameVM();
 
@@ -120,7 +120,7 @@ namespace MVC.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage responseMessage = await client.GetAsync("category");
+                HttpResponseMessage responseMessage = await client.GetAsync("api/category?query="+ query);
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
                 List<CategoryVM> categories = JsonConvert.DeserializeObject<List<CategoryVM>>(jsonString);
                 gameVM.CategorySelectList = new SelectList(
@@ -150,7 +150,7 @@ namespace MVC.Controllers
 
                     byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-                    HttpResponseMessage responseMessage = await client.PostAsync("game", byteContent);
+                    HttpResponseMessage responseMessage = await client.PostAsync("api/game", byteContent);
 
                     string jsonString = await responseMessage.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<GameVM>(jsonString);
@@ -174,7 +174,7 @@ namespace MVC.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage responseMessage = await client.DeleteAsync("game/" + id);
+                    HttpResponseMessage responseMessage = await client.DeleteAsync("api/game/" + id);
 
                 }
                 return RedirectToAction("Index");

@@ -13,30 +13,56 @@ namespace ApplicationService.Implementations
     {
         private GameStore2DistributedDBContext ctx = new GameStore2DistributedDBContext();
 
-        public List<GameDTO> Get()
+        public List<GameDTO> Get(string query)
         {
             List<GameDTO> gamesDto = new List<GameDTO>();
 
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                foreach (var item in unitOfWork.GameRepository.Get())
+                if (query == null)
                 {
-                    gamesDto.Add(new GameDTO
+                    foreach (var item in unitOfWork.GameRepository.Get())
                     {
-                        Id = item.Id,
-                        Name = item.Name,
-                        ShortDescription = item.ShortDescription,
-                        LongDescription = item.LongDescription,
-                        Release = item.Release,
-                        Price = item.Price,
-                        Category = new CategoryDTO
+                        gamesDto.Add(new GameDTO
                         {
-                            Id = item.Category.Id,
-                            Title = item.Category.Title,
-                            Description = item.Category.Description
-                        }
-                    });
+                            Id = item.Id,
+                            Name = item.Name,
+                            ShortDescription = item.ShortDescription,
+                            LongDescription = item.LongDescription,
+                            Release = item.Release,
+                            Price = item.Price,
+                            Category = new CategoryDTO
+                            {
+                                Id = item.Category.Id,
+                                Title = item.Category.Title,
+                                Description = item.Category.Description
+                            }
+                        });
+                    }
                 }
+                else
+                {
+                    foreach (var item in unitOfWork.GameRepository.GetByQuery().Where(c => c.Name.Contains(query)).ToList())
+                    {
+                        gamesDto.Add(new GameDTO
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            ShortDescription = item.ShortDescription,
+                            LongDescription = item.LongDescription,
+                            Release = item.Release,
+                            Price = item.Price,
+                            Category = new CategoryDTO
+                            {
+                                Id = item.Category.Id,
+                                Title = item.Category.Title,
+                                Description = item.Category.Description
+                            }
+                        });
+                    }
+                }
+
+               
             }
             return gamesDto;
         }
