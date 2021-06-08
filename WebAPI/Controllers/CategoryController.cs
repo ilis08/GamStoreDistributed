@@ -10,7 +10,7 @@ using WebAPI.Messages;
 
 namespace WebAPI.Controllers
 {
-   
+    [Authorize]
     [RoutePrefix("api/category")]
     public class CategoryController : BaseController
     {

@@ -10,6 +10,7 @@ using WebAPI.Messages;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/game")]
     public class GameController : BaseController
     {

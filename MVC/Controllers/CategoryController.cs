@@ -15,13 +15,44 @@ namespace MVC.Controllers
     {
         private readonly Uri url = new Uri("http://localhost:44331/api/category");
         // GET: Category
+
+        private static  async Task<string> GetAccessToken()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:44331");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                List<KeyValuePair<string, string>> postData = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("username","ilis08"),
+                    new KeyValuePair<string, string>("password","123456"),
+                    new KeyValuePair<string, string>("grant_type","password")
+                };
+
+                FormUrlEncodedContent content = new FormUrlEncodedContent(postData);
+
+                HttpResponseMessage responseMessage = await client.PostAsync("token", content);
+
+                string jsonString = await responseMessage.Content.ReadAsStringAsync();
+                object responseData = JsonConvert.DeserializeObject(jsonString);
+
+                return ((dynamic)responseData).access_token;
+            }
+        }
+
         public async Task<ActionResult> Index(string query)
         {
+            string accessToken = await GetAccessToken();
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = url;
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
                 HttpResponseMessage responseMessage = await client.GetAsync("?query="+query);
 
@@ -35,11 +66,15 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> Details(int id)
         {
+            string accessToken = await GetAccessToken();
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = url;
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
                 HttpResponseMessage responseMessage = await client.GetAsync("category/" +id);
 
@@ -53,11 +88,15 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
+            string accessToken = await GetAccessToken();
             using (var client = new HttpClient())
             {
                 client.BaseAddress = url;
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
                 HttpResponseMessage responseMessage = await client.GetAsync("category/" + id);
 
                 string jsonString = await responseMessage.Content.ReadAsStringAsync();
@@ -70,6 +109,7 @@ namespace MVC.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(CategoryVM categoryVM)
         {
+            string accessToken = await GetAccessToken();
             try
             {
                 using (var client = new HttpClient())
@@ -77,6 +117,8 @@ namespace MVC.Controllers
                     client.BaseAddress = url;
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
                     var content = JsonConvert.SerializeObject(categoryVM);
                     var buffer = System.Text.Encoding.UTF8.GetBytes(content);
@@ -108,11 +150,15 @@ namespace MVC.Controllers
            
             try
             {
+                string accessToken = await GetAccessToken();
+
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = url;
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
                     var content = JsonConvert.SerializeObject(categoryVM);
                     var buffer = System.Text.Encoding.UTF8.GetBytes(content);
@@ -135,11 +181,15 @@ namespace MVC.Controllers
         {
             try
             {
+                string accessToken = await GetAccessToken();
+
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = url;
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
                     HttpResponseMessage responseMessage = await client.DeleteAsync("category/" + id);
 
