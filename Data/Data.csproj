@@ -51,38 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\GameStore2DistributedDBContext.cs" />
+    <Compile Include="Context\GameStore3DistributedDBContext.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Game.cs" />
     <Compile Include="Entities\Order.cs" />
-    <Compile Include="Migrations\202105311014130_InitialCreate.cs" />
-    <Compile Include="Migrations\202105311014130_InitialCreate.designer.cs">
-      <DependentUpon>202105311014130_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105311020400_Second.cs" />
-    <Compile Include="Migrations\202105311020400_Second.designer.cs">
-      <DependentUpon>202105311020400_Second.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106031917489_Last.cs" />
-    <Compile Include="Migrations\202106031917489_Last.designer.cs">
-      <DependentUpon>202106031917489_Last.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106031925135_Last2.cs" />
-    <Compile Include="Migrations\202106031925135_Last2.designer.cs">
-      <DependentUpon>202106031925135_Last2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106041207434_Last3.cs" />
-    <Compile Include="Migrations\202106041207434_Last3.designer.cs">
-      <DependentUpon>202106041207434_Last3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106041213308_Last4.cs" />
-    <Compile Include="Migrations\202106041213308_Last4.designer.cs">
-      <DependentUpon>202106041213308_Last4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106041455367_Last5.cs" />
-    <Compile Include="Migrations\202106041455367_Last5.designer.cs">
-      <DependentUpon>202106041455367_Last5.cs</DependentUpon>
+    <Compile Include="Migrations\202106061216524_Initial.cs" />
+    <Compile Include="Migrations\202106061216524_Initial.designer.cs">
+      <DependentUpon>202106061216524_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,26 +68,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202105311014130_InitialCreate.resx">
-      <DependentUpon>202105311014130_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105311020400_Second.resx">
-      <DependentUpon>202105311020400_Second.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106031917489_Last.resx">
-      <DependentUpon>202106031917489_Last.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106031925135_Last2.resx">
-      <DependentUpon>202106031925135_Last2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106041207434_Last3.resx">
-      <DependentUpon>202106041207434_Last3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106041213308_Last4.resx">
-      <DependentUpon>202106041213308_Last4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106041455367_Last5.resx">
-      <DependentUpon>202106041455367_Last5.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202106061216524_Initial.resx">
+      <DependentUpon>202106061216524_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

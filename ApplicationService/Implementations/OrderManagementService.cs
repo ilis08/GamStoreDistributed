@@ -12,7 +12,7 @@ namespace ApplicationService.Implementations
 {
     public class OrderManagementService
     {
-        private GameStore2DistributedDBContext ctx = new GameStore2DistributedDBContext();
+        private GameStore3DistributedDBContext ctx = new GameStore3DistributedDBContext();
 
         public List<OrderDTO> Get(string query)
         {

@@ -13,7 +13,7 @@ namespace MVC.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly Uri url = new Uri("https://localhost:44331/api");
+        private readonly Uri url = new Uri("http://localhost:44331/api");
         // GET: Order
         public async Task<ActionResult> Index(string query)
         {

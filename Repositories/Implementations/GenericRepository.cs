@@ -11,11 +11,11 @@ namespace Repositories.Implementations
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        internal GameStore2DistributedDBContext context;
+        internal GameStore3DistributedDBContext context;
         internal DbSet<TEntity> dbSet;
 
         // Constructor 
-        public GenericRepository(GameStore2DistributedDBContext context)
+        public GenericRepository(GameStore3DistributedDBContext context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();

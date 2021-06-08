@@ -13,7 +13,7 @@ namespace MVC.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly Uri url = new Uri("https://localhost:44331/api/category");
+        private readonly Uri url = new Uri("http://localhost:44331/api/category");
         // GET: Category
         public async Task<ActionResult> Index(string query)
         {

@@ -10,7 +10,7 @@ namespace Repositories.Implementations
 {
     public class UnitOfWork : IDisposable
     {
-        private GameStore2DistributedDBContext context = new GameStore2DistributedDBContext();
+        private GameStore3DistributedDBContext context = new GameStore3DistributedDBContext();
 
         private GenericRepository<Game> gameRepository;
         private GenericRepository<Category> categoryRepository;
