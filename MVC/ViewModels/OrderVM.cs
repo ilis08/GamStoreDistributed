@@ -30,6 +30,8 @@ namespace MVC.ViewModels
 
         public SelectList GameSelectList { get; set; }
 
+        public SelectListItem GameSelectedItem { get; set; }
+
         public OrderVM()
         {
 

@@ -1,0 +1,14 @@
+﻿@model MVC.ViewModels.OrderVM
+
+@{
+    ViewBag.Title = "Success";
+}
+
+<div class="text-center">
+    <h2>Thanks!</h2>
+    <p>Thanks for booking in our store.</p>
+    <p>We'll ship your goods as soon as possible.</p>
+    <br />
+    <br />
+    <input class="btn btn-success " value="Continue Shopping!" onclick="location.href='@Url.Action("Index", "Home")'" />
+</div>

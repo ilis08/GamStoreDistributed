@@ -6,6 +6,33 @@
 }
 
 <body>
-    <h2>All Games</h2>
+    <h2 class="text-center">My Distributed GameStore</h2>
+    <br />
+    <div class="text-center">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+        {
+            @Html.TextBox("query")
+            <input class="textcolor1" type="submit" value="Search" />
+        }
+    </div>
+
+    <br />
+
+    @foreach (var item in Model)
+    {
+    <div class="well" method="post" action="/Home/Create">
+    <h3 >
+        <strong class="textcolor1">@item.Name</strong>
+        <span class="pull-right label label-primary">@item.Price.ToString("c", CultureInfo.CreateSpecificCulture("en-US"))</span>
+    </h3>
+        <br />
+    <span class="lead textcolor1">@item.ShortDescription</span>
     
-</body>
+    <hr />
+        <input type="button" class="btn btn-success" value="Create" onclick="location.href='@Url.Action("Create", "Home")'" />
+           
+    </div>
+     }
+      
+
+    </body>

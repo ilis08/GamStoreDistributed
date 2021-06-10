@@ -10,5 +10,6 @@ namespace MVC.ViewModels
     {
         public IEnumerable<GameVM> Games { get; set; }
         public PagingModel PagingModel { get; set; }
+        public string CurrentCategory { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿body {
+    color:white;
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -22,3 +23,68 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.textcolor1{
+    color:black;
+}
+
+.btn-edit:hover {
+    transition-duration:0.4s;
+}
+
+.btn-edit {
+    background-color: cyan;
+    border: none;
+    color: white;
+    padding: 5px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    border-radius: 8px;
+}
+
+.btn-details:hover {
+    transition-duration: 0.4s;
+}
+.btn-details {
+    background-color: lawngreen;
+    border: none;
+    color: white;
+    padding: 5px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    border-radius: 8px;
+}
+
+.btn-delete:hover {
+    transition-duration: 0.4s;
+}
+.btn-delete {
+    background-color: red;
+    border: none;
+    color: white;
+    padding: 5px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    border-radius: 8px;
+}
+
+.btn-create:hover {
+    transition-duration: 0.4s;
+}
+
+.btn-create {
+    background-color: white;
+    color: black;
+    text-align: center;
+    padding: 8px 10px;
+    border: 1px solid #4CAF50;
+    font-size: 18px;
+    border-radius: 8px;
+}
+

@@ -1,22 +1,13 @@
 ﻿@model MVC.ViewModels.OrderVM
 
-@{
-    ViewBag.Title = "Edit";
-}
-
-<h2>Edit</h2>
-
-
+<h1>Create Order</h1>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>OrderVM</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
         <div class="form-group">
             @Html.LabelFor(model => model.BuyerName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -56,19 +47,16 @@
                 @Html.ValidationMessageFor(model => model.Game.Id, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <br />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="button" class="btn btn-danger" value="Cancel" onclick="location.href='@Url.Action("Index", "Home")'" />
             </div>
         </div>
     </div>
 }
 
-<br />
-<div>
-    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn-edit" })
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
